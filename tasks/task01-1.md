@@ -71,7 +71,7 @@
 
 我选择的是Flowbo，从YC项目链接找到的，如下：
 [Flowbo](https://www.ycombinator.com/companies/flowbo-inc)
-![](../images/task01-1-3.png)
+![Flowbo](../images/task01-1-3.png)
 
 > Flowbo的拆解
 > 该产品的本质是帮创作者把“未来能确定拿到的钱”
