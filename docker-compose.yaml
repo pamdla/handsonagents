@@ -1,0 +1,13 @@
+services:
+  handsonagents:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: helloagents:team1237.h1
+    container_name: handsonagents
+    hostname: team1237
+    restart: unless-stopped
+    volumes:
+      - $PWD/src:/learning
+      - $PWD/.env:/learning/.env
