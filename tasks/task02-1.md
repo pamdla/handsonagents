@@ -60,16 +60,14 @@ Agent（智能体）是能够感知环境、做出决策并采取行动以实现
 
 ## 本节课的知识关系图
 
-[Agent概念关系图](../images/task02-1-1.png)
-
-[Agent决策架构图](../images/task02-1-2.png)
-
-[Agent工程框架图](../images/task02-1-3.png)
+- [Agent概念关系图](../images/task02-1-1.png)
+- [Agent决策架构图](../images/task02-1-2.png)
+- [Agent工程框架图](../images/task02-1-3.png)
 
 ## 代码动手实现与改造
 
-[任务2代码](../src/task02.py)
-[任务2过程](../gifs/task02.gif)
+- [任务2代码](../src/task02.py)
+- [任务2过程](../gifs/task02.gif)
 
 后续查对：任务2执行问题出现错误，是模型幻觉，还是搜索不对呢？
 
