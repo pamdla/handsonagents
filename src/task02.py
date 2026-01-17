@@ -39,7 +39,7 @@ class BaseModel:
 class Ollama(BaseModel):
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.client = OpenAI(api_key=self.api_key, base_url=f"{config.LLM_BASE_URL}/v1")
+        self.client = OpenAI(api_key=self.api_key, base_url=config.LLM_BASE_URL)
 
     def chat(self, prompt: str, history: List[Dict[str, str]] = [], system_prompt: str = "") -> Tuple[str, List[Dict[str, str]]]:
         """
@@ -130,7 +130,7 @@ class ReactTools:
         }
 
         try:
-            response = requests.request("POST", url, headers=headers, data=payload).json()
+            response = requests.request("POST", url, headers=headers, json=payload).json()
             organic_results = response.get('organic', [])
 
             # 格式化搜索结果
@@ -161,16 +161,25 @@ class ReactAgent:
         """初始化 React Agent"""
         self.api_key = api_key or config.LLM_API_KEY
         self.tools = ReactTools()
-        self.model = Ollama(api_key)
+        self.model = Ollama(self.api_key)
         self.system_prompt = self._build_system_prompt()
 
     def _build_system_prompt(self) -> str:
         """构建 ReAct 系统提示"""
         # 组合工具描述和 ReAct 模式指导
+        tool_descriptions = []
+        for tool in self.tools.toolConfig:
+            tool_descriptions.append(
+                f"{tool['name_for_model']}: {tool['description_for_model']}"
+                f" 参数: {json5.dumps(tool['parameters'], ensure_ascii=False)}"
+            )
+
+        tool_names = [tool['name_for_model'] for tool in self.tools.toolConfig]
+        #
         prompt = f"""现在时间是 {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}。
 你是一位智能助手，可以使用以下工具来回答问题：
 
-{tool_descriptions}
+{chr(10).join(tool_descriptions)}
 
 请遵循以下 ReAct 模式：
 
@@ -186,7 +195,7 @@ class ReactAgent:
 开始！"""
         return prompt
 
-    def _parse_action(self, text: str) -> tuple[str, dict]:
+    def _parse_action(self, text: str, verbose: bool = False) -> tuple[str, dict]:
         """解析模型输出中的行动和参数"""
         # 使用正则表达式提取行动和参数
         action_pattern = r"行动[:：]\s*(\w+)"
@@ -295,5 +304,5 @@ if __name__ == '__main__':
     config = Config()
     print(config)
     agent = ReactAgent()
-    response = agent.run("最近两周内港股上市的科技公司有哪些？", max_iterations=3, verbose=True)
+    response = agent.run("最近苹果公司有哪些产品发布？", max_iterations=3, verbose=True)
     print("最终答案：", response)

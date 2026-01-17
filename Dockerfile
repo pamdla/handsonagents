@@ -13,15 +13,16 @@ WORKDIR /learning
 
 COPY requirements.txt .
 
-RUN echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main" > /etc/apt/sources.list && \
+RUN rm -f /etc/apt/sources.list.d/* && \
+    echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main" > /etc/apt/sources.list && \
     echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main" >> /etc/apt/sources.list && \
     echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bookworm-security main" >> /etc/apt/sources.list
 
-RUN apt update \
-    && apt install -y --no-install-recommends \
-    && apt install -y git wget make gcc g++ \
-    && apt autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt update \
+#     && apt install -y --no-install-recommends \
+#     && apt install -y git wget make gcc g++ \
+#     && apt autoremove -y \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir -r requirements.txt
